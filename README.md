@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Warning! This repo has no numerical validation yet! Work in progress! You can use the code on your own risk!
 
 
