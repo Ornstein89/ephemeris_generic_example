@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![CMake on multiple platforms](https://github.com/Ornstein89/ephemeris_generic_example/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/Ornstein89/ephemeris_generic_example/actions/workflows/cmake-multi-platform.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![CMake build Windows/Linux](https://github.com/Ornstein89/ephemeris_generic_example/actions/workflows/cmake-multi-platform.yml/badge.svg)](https://github.com/Ornstein89/ephemeris_generic_example/actions/workflows/cmake-multi-platform.yml)
 
 # Warning! This repo has no numerical validation yet! Work in progress! You can use the code on your own risk!
 
@@ -22,7 +22,7 @@ and ephemeris data source files:
 * [x] CMake adaptation
 * [x] CMake autodownload libs and kernels
 * [x] CI/CD
-* [ ] Crosspaltforming (Windows/Linux)
+* [x] Crosspaltform build (Windows/Linux)
 * [ ] Update Visual Studio build system
 * [ ] Internationalization
 * [ ] Documentation
