@@ -18,16 +18,23 @@ add_executable(ephemeris_app
 #    PRIVATE
 #    cspice)
 
-# альтернативное подключение cspice, предварительно построенной с помощью
-# оригинальной пакетной сборки, или скачанной
-# !ВНИМАНИЕ при сборке на Linux следует переименовать
-# cspice/lib/cspice.a в libcspice.a
-
 include_directories(../libs/cspice/include)
-find_library(CSPICE_PREBUILT
-    cspice.a
-    ../libs/cspice/lib)
-message(${CSPICE_PREBUILT})
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+
+    find_library(CSPICE_PREBUILT
+        cspice
+        ../libs/cspice/lib)
+    #message(${CSPICE_PREBUILT})
+
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+
+    find_library(CSPICE_PREBUILT
+        cspice.a  # в скачиваемом пакете библиотека названа не libcspice.a, а cspice.a
+        ../libs/cspice/lib)
+    #message(${CSPICE_PREBUILT})
+
+endif()
+
 target_link_libraries(ephemeris_app
     PRIVATE
     ${CSPICE_PREBUILT})

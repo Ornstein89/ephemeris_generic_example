@@ -16,3 +16,14 @@ and ephemeris data source files:
 
 * EPM 2017 ephemeris data files (http://iaaras.ru/en/dept/ephemeris/epm/2017/#4)
 * NASA JPL DE430 and in general DE4xx series (https://ssd.jpl.nasa.gov/?planet_eph_export)
+
+## TODO
+
+* [x] CMake adaptation
+* [x] CMake autodownload libs and kernels
+* [x] CI/CD
+* [ ] Crosspaltforming (Windows/Linux)
+* [ ] Update Visual Studio build system
+* [ ] Internationalization
+* [ ] Documentation
+* [ ] Testing
