@@ -13,11 +13,6 @@ add_executable(ephemeris_app
     ${SOURCES}
 )
 
-#подключение cspice, собранного в данном CMake проекте
-#target_link_libraries(ephemeris_app
-#    PRIVATE
-#    cspice)
-
 include_directories(../libs/cspice/include)
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
 
@@ -35,9 +30,15 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 endif()
 
+# подключение cspice, скачанного с сайта NASA JPL
 target_link_libraries(ephemeris_app
     PRIVATE
     ${CSPICE_PREBUILT})
+
+#подключение cspice, собранного на локальной машине в libs/CMakeLists.txt
+#target_link_libraries(ephemeris_app
+#    PRIVATE
+#    cspice)
 
 # подключение эфемерид ИПМ РАН
 target_link_libraries(ephemeris_app
