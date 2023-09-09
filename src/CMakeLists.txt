@@ -38,25 +38,25 @@ target_link_libraries(ephemeris_app
     ephaccess)
 
 # копирование локальных файлов данных (ядер) с коэффициентами
-configure_file(../data/NASA_JPL/naif0012.tls
-    naif0012.tls
-    COPYONLY)
-configure_file(../data/NASA_JPL/de440.bsp
-    de440.bsp
-    COPYONLY)
-configure_file(../data/EPM2021/epm2021.bsp
-    epm2021.bsp
-    COPYONLY)
+# configure_file(../data/NASA_JPL/naif0012.tls
+#     naif0012.tls
+#     COPYONLY)
+# configure_file(../data/NASA_JPL/de440.bsp
+#     de440.bsp
+#     COPYONLY)
+# configure_file(../data/EPM2021/epm2021.bsp
+#     epm2021.bsp
+#     COPYONLY)
 
 # альтернативно: скачивание файлов данных
-#file(DOWNLOAD
-#    https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
-#    naif0012.tls)
-#file(DOWNLOAD
-#    https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp
-#    de440.bsp)
-#file(DOWNLOAD
-#    https://ftp.iaaras.ru/pub/epm/EPM2021/SPICE/epm2021.bsp
-#    epm2021.bsp)
+file(DOWNLOAD
+   https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
+   naif0012.tls)
+file(DOWNLOAD
+   https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp
+   de440.bsp)
+file(DOWNLOAD
+   https://ftp.iaaras.ru/pub/epm/EPM2021/SPICE/epm2021.bsp
+   epm2021.bsp)
 
 #TODO загрузка файлов по сети
