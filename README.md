@@ -13,6 +13,44 @@ The project shows an example of Solar System bodies position and modion calculat
 1) [JPL ephemeris](https://ssd.jpl.nasa.gov/planets/eph_export.html) (DE-series) with NAIF [`C SPICE` toolkit](https://naif.jpl.nasa.gov/naif/toolkit.html).
 2) [IAA RAS ephemeris](https://iaaras.ru/dept/ephemeris/epm/) (EPM-series) with [`libephaccess` library](https://gitlab.iaaras.ru/iaaras/ephemeris-access).
 
+## Build and launch
+
+### Windows
+
+Need to install [CMake*](https://cmake.org/download/) and one of C/C++ build tools (MSVC as part of [Visual Studio Community](https://learn.microsoft.com/ru-ru/cpp/build/vscpp-step-0-installation), for example) first.
+
+*I'm working on alternative build system based on Visual Studio solution only, will be available in the future.
+
+```bat
+git clone https://github.com/Ornstein89/ephemeris_generic_example.git
+cd ephemeris_generic_example
+mkdir build_windows
+cd build_windows
+cmake .. :: cmake configure for your local machine
+cmake --build :: build of all targets: example apps, libs, tests
+ctest :: unit testing
+```
+
+### Linux
+
+Need to install CMake and C/C++ build tools first:
+
+```bash
+sudo apt-get install git g++ gcc build-essential cmake
+```
+
+Project build:
+
+```bash
+git clone https://github.com/Ornstein89/ephemeris_generic_example.git
+cd ephemeris_generic_example
+mkdir build_ubuntu
+cd build_ubuntu
+cmake .. # cmake configure for your local machine
+cmake --build # build of all targets: example apps, libs, tests
+ctest # unit testing
+```
+
 ## TODO
 
 * [x] CMake adaptation

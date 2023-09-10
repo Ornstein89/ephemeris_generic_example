@@ -38,7 +38,13 @@ target_link_libraries(ephemeris_app
 
 ### Windows
 
+Предварительно требуется установка [CMake*](https://cmake.org/download/) и одного из компиляторов для C/C++ (к примеру, компилятор MSVC в составе [Visual Studio Community](https://learn.microsoft.com/ru-ru/cpp/build/vscpp-step-0-installation)).
+
+*Ведётся разработка резервной системы сборки без CMake, на основе только Visual Studio.
+
 ```bat
+git clone https://github.com/Ornstein89/ephemeris_generic_example.git
+cd ephemeris_generic_example
 mkdir build_windows
 cd build_windows
 cmake .. # конфигурация cmake-сборки на локальной машине
@@ -48,7 +54,17 @@ ctest # запуск автотестирования
 
 ### Linux
 
+Предварительно требуется установка CMake и инструментов для разработки на C/C++:
+
 ```bash
+sudo apt-get install git g++ gcc build-essential cmake
+```
+
+Сборка проекта:
+
+```bash
+git clone https://github.com/Ornstein89/ephemeris_generic_example.git
+cd ephemeris_generic_example
 mkdir build_ubuntu
 cd build_ubuntu
 cmake .. # конфигурация cmake-сборки на локальной машине
