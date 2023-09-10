@@ -21,26 +21,27 @@ project(libs VERSION 1.0.0 LANGUAGES C)
 #
 
 # скачивание и распаковка CSPICE
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    file(DOWNLOAD
-        https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Windows_VisualC_64bit/packages/cspice.zip
-        ${CMAKE_CURRENT_SOURCE_DIR}/cspice.zip
-    )
-    file(ARCHIVE_EXTRACT
-        INPUT ${CMAKE_CURRENT_SOURCE_DIR}/cspice.zip
-        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
-    # "tar -xf cspice.zip"
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    file(DOWNLOAD
-        https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z
-        ${CMAKE_CURRENT_SOURCE_DIR}/cspice.tar.Z
-    )
-    file(ARCHIVE_EXTRACT
-        INPUT ${CMAKE_CURRENT_SOURCE_DIR}/cspice.tar.Z
-        DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
-    )
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cspice")
+    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+        file(DOWNLOAD
+            https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Windows_VisualC_64bit/packages/cspice.zip
+            ${CMAKE_CURRENT_SOURCE_DIR}/cspice.zip
+        )
+        file(ARCHIVE_EXTRACT
+            INPUT ${CMAKE_CURRENT_SOURCE_DIR}/cspice.zip
+            DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
+        # "tar -xf cspice.zip"
+    elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+        file(DOWNLOAD
+            https://naif.jpl.nasa.gov/pub/naif/toolkit//C/PC_Linux_GCC_64bit/packages/cspice.tar.Z
+            ${CMAKE_CURRENT_SOURCE_DIR}/cspice.tar.Z
+        )
+        file(ARCHIVE_EXTRACT
+            INPUT ${CMAKE_CURRENT_SOURCE_DIR}/cspice.tar.Z
+            DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}
+        )
+    endif()
 endif()
-
 
 file(GLOB
     CSPICE_SOURCES
@@ -122,6 +123,26 @@ set_target_properties(cspice
     LINKER_LANGUAGE C)
 
 
+# скачивание файлов данных (ядер), если отсутствуют в каталоге /data
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/NASA_JPL/de440.bsp")
+    message("/data/NASA_JPL/de440.bsp not exists, downloading")
+    file(DOWNLOAD
+       https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp
+       de440.bsp)
+else()
+    message("/data/NASA_JPL/de440.bsp exists")
+endif()
+
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/NASA_JPL/naif0012.tls")
+    message("/data/NASA_JPL/naif0012.tls not exists, downloading")
+    file(DOWNLOAD
+       https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
+       naif0012.tls)
+else()
+    message("/data/NASA_JPL/naif0012.tls exists")
+endif()
+
+
 #
 # IAA RAS libephaccess (https://gitlab.iaaras.ru/iaaras/ephemeris-access)
 # изначально ориентирована на сборку в Visual Studio (Windows) или Make (Linux)
@@ -161,3 +182,14 @@ target_include_directories(ephaccess
 target_sources(ephaccess
     INTERFACE
     ${EPHACCESS_SOURCES} )
+
+
+# скачивание файлов данных (ядер), если отсутствуют в каталоге /data
+if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/EPM2021/epm2021.bsp")
+    message("/data/EPM2021/epm2021.bsp not exists, downloading")
+    file(DOWNLOAD
+       https://ftp.iaaras.ru/pub/epm/EPM2021/SPICE/epm2021.bsp
+       epm2021.bsp)
+else()
+    message("/data/EPM2021/epm2021.bsp exists")
+endif()
