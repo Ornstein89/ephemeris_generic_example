@@ -128,19 +128,33 @@ if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/NASA_JPL/de440.bsp")
     message("/data/NASA_JPL/de440.bsp not exists, downloading")
     file(DOWNLOAD
        https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440.bsp
-       de440.bsp)
+       ${CMAKE_SOURCE_DIR}/data/NASA_JPL/de440.bsp)
 else()
     message("/data/NASA_JPL/de440.bsp exists")
 endif()
 
-if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/NASA_JPL/naif0012.tls")
-    message("/data/NASA_JPL/naif0012.tls not exists, downloading")
-    file(DOWNLOAD
-       https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
-       naif0012.tls)
-else()
-    message("/data/NASA_JPL/naif0012.tls exists")
-endif()
+# в https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/aareadme.txt
+# рекомендовано использовать для windows naif0012.tls.pc вместо naif0012.tls
+# однако при тестировании не было замечено разницы
+#if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+#    if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/NASA_JPL/naif0012.tls.pc")
+#        message("/data/NASA_JPL/naif0012.tls.pc not exists, downloading")
+#        file(DOWNLOAD
+#           https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls.pc
+#           ${CMAKE_SOURCE_DIR}/data/NASA_JPL/naif0012.tls.pc)
+#    else()
+#        message("/data/NASA_JPL/naif0012.tls.pc exists")
+#    endif()
+#elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/NASA_JPL/naif0012.tls")
+        message("/data/NASA_JPL/naif0012.tls not exists, downloading")
+        file(DOWNLOAD
+           https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/naif0012.tls
+           ${CMAKE_SOURCE_DIR}/data/NASA_JPL/naif0012.tls)
+    else()
+        message("/data/NASA_JPL/naif0012.tls exists")
+    endif()
+#endif()
 
 
 #
@@ -191,7 +205,7 @@ if (NOT EXISTS "${CMAKE_SOURCE_DIR}/data/EPM2021/epm2021.bsp")
     message("/data/EPM2021/epm2021.bsp not exists, downloading")
     file(DOWNLOAD
        https://ftp.iaaras.ru/pub/epm/EPM2021/SPICE/epm2021.bsp
-       epm2021.bsp)
+       ${CMAKE_SOURCE_DIR}/data/EPM2021/epm2021.bsp)
 else()
     message("/data/EPM2021/epm2021.bsp exists")
 endif()

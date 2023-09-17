@@ -35,7 +35,15 @@ configure_file(
 )
 
 # копирование локальных файлов данных (ядер) с коэффициентами
-configure_file(../data/NASA_JPL/naif0012.tls.pc
+
+#в https://naif.jpl.nasa.gov/pub/naif/generic_kernels/lsk/aareadme.txt
+# рекомендовано использовать для windows naif0012.tls.pc вместо naif0012.tls
+# однако при тестировании не было замечено разницы
+#configure_file(../data/NASA_JPL/naif0012.tls.pc
+#    naif0012.tls
+#    COPYONLY)
+
+configure_file(../data/NASA_JPL/naif0012.tls
     naif0012.tls
     COPYONLY)
 configure_file(../data/NASA_JPL/de440.bsp
