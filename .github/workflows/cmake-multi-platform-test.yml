@@ -61,6 +61,10 @@ jobs:
         workflow: cmake-multi-platform.yml
         path: ${{ steps.strings.outputs.build-output-dir }}
         name: built-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.cpp_compiler }}
+    - name: Fix permissions
+      shell: bash
+      run: |
+        chmod +x ${{ steps.strings.outputs.build-output-dir }}/test/test_runner
     # - name: Rename extracted
     #   shell: bash
     #   run: |
