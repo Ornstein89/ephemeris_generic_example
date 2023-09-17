@@ -59,12 +59,12 @@ jobs:
       uses: dawidd6/action-download-artifact@v2
       with:
         workflow: cmake-multi-platform.yml
-        path: ${{ github.workspace }}
+        path: ${{ steps.strings.outputs.build-output-dir }}
         name: built-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.cpp_compiler }}
-    - name: Rename extracted
-      shell: bash
-      run: |
-        mv "built-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.cpp_compiler }}" "build"
+    # - name: Rename extracted
+    #   shell: bash
+    #   run: |
+    #     mv "built-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.cpp_compiler }}" "build"
     # - name: Download a single artifact
     #   uses: actions/download-artifact@v3
     #   with:
