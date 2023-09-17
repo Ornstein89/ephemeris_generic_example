@@ -63,8 +63,9 @@ jobs:
         name: built-${{ matrix.os }}-${{ matrix.c_compiler }}-${{ matrix.cpp_compiler }}
     - name: Fix permissions
       shell: bash
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        chmod +x ${{ steps.strings.outputs.build-output-dir }}/test/test_runner
+        chmod +x ${{ steps.strings.outputs.build-output-dir }}/test/${{ matrix.build_type }}/test_runner
     # - name: Rename extracted
     #   shell: bash
     #   run: |
