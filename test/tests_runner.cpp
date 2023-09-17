@@ -53,8 +53,10 @@ TEST(cspice_de440_test, positive)
         // ASSERT_TRUE(newline.find("A.D.") != std::string::npos
         //              && newline.find("TDB") != std::string::npos)
         //     << "line \"" << newline << "\" not contain julian day";
-        std::stringstream(newline) >> jd_str; // >> jd
 
+        std::stringstream(newline) >> jd; // >> jd_str;
+
+        // если данные скачаны не в CSV, а в простом формате
         // ASSERT_TRUE(newline.find("X") != std::string::npos
         //              && newline.find("Y") != std::string::npos
         //              && newline.find("Z") != std::string::npos)
@@ -68,10 +70,12 @@ TEST(cspice_de440_test, positive)
         newline = newline.substr(newline.find(",")+1);
         std::stringstream(newline) >> Z_km;
 
+        // если данные скачаны не в CSV, а в простом формате
         // ASSERT_TRUE(newline.find("VX") != std::string::npos
         //              && newline.find("VY") != std::string::npos
         //              && newline.find("VZ") != std::string::npos)
         //     << "line \"" << newline << "\" not contain VX, VY, VZ";
+
         newline = newline.substr(newline.find(",")+1);
         std::stringstream(newline) >> Vx_kms;
         newline = newline.substr(newline.find(",")+1);
@@ -79,29 +83,35 @@ TEST(cspice_de440_test, positive)
         newline = newline.substr(newline.find(",")+1);
         std::stringstream(newline) >> Vz_kms;
 
-        SpiceDouble   et_s; //(jd - j2000_c())*spd_c();
-        jd_str.resize(jd_str.size()-1);
-        str2et_c((jd_str+" JD").c_str(), &et_s); // https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/str2et_c.html
+        SpiceDouble   et_s = (jd - j2000_c())*spd_c();
+
+        // то же самое, JD->ET, но через строку
+        // jd_str.resize(jd_str.size()-1);
+        // str2et_c((jd_str+" JD").c_str(), &et_s);
+
         SpiceDouble   state[6] = {0.0};
         SpiceDouble   lt_s;
-        spkezr_c("MOON",    // target body name or NAIF ID, https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html
-                 et_s,      // s, seconds past J2000 epoch, https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/time.html
-                 "J2000",   // reference frame, https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/frames.html
+        spkezr_c("MOON",
+                 et_s,
+                 "J2000",
                  "NONE",
-                 "EARTH",   // observer body name or NAIF ID, https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/naif_ids.html
-                 state,     // output parameter, body state, wich is [X km, Y km, Z km, Vx km/s, Vy km/s, Vz km/s]
-                 &lt_s);    // s, the one-way light time between the observer and target
+                 "EARTH",
+                 state,
+                 &lt_s);
+
+        // DEBUG
         // ofs << jd_str << ", " << et_s << ", "
         //     << X_km << ", " << Y_km << ", " << Z_km << ", "
         //     << Vx_kms << ", "<< Vy_kms << ", "<< Vz_kms << ", "
         //     << state[0] << ", " << state[1] << ", " << state[2] << ", "
         //     << state[3] << ", "<< state[4] << ", "<< state[5] << "\n";
-        EXPECT_NEAR(X_km, state[0], 100.0); // coordinate tolerance 100 km
-        EXPECT_NEAR(Y_km, state[1], 100.0); // coordinate tolerance 100 km
-        EXPECT_NEAR(Z_km, state[2], 100.0); // coordinate tolerance 100 km
-        EXPECT_NEAR(Vx_kms, state[3], 0.1); // velocity tolerance 0.0005 km/s
-        EXPECT_NEAR(Vy_kms, state[4], 0.1); // velocity tolerance 0.0005 km/s
-        EXPECT_NEAR(Vz_kms, state[5], 0.1); // velocity tolerance 0.0005 km/s
+
+        EXPECT_NEAR(X_km, state[0], 1.0); // coordinate tolerance 1 km
+        EXPECT_NEAR(Y_km, state[1], 1.0); // coordinate tolerance 1 km
+        EXPECT_NEAR(Z_km, state[2], 1.0); // coordinate tolerance 1 km
+        EXPECT_NEAR(Vx_kms, state[3], 0.0005); // velocity tolerance 0.0005 km/s
+        EXPECT_NEAR(Vy_kms, state[4], 0.0005); // velocity tolerance 0.0005 km/s
+        EXPECT_NEAR(Vz_kms, state[5], 0.0005); // velocity tolerance 0.0005 km/s
 
         std::getline(fs, newline);
     }
@@ -111,8 +121,67 @@ TEST(cspice_de440_test, positive)
 
 TEST(libephaccess_epm2021_test, positive)
 {
-    // генерация тестовых данных https://iaaras.ru/dept/ephemeris/online/
+    /* инициализация эфемерид EPM 2021 */
+    int result = 0;
+    EphAccess *eph = ephCreate();
+    ASSERT_FALSE(eph == NULL) << "ephCreate() error: "
+                              << ephLastError(eph) << std::endl;
 
+    result = ephLoadFile(eph, "epm2021.bsp" );
+    ASSERT_FALSE(result < 0) << "ephLoadFile() error: "
+                         << ephLastError(eph) << std::endl;
+
+    ephSetDistanceUnits(eph, EPH_KM); // EPH_AU
+    ephSetTimeUnits(eph, EPH_SEC); // EPH_DAY
+    char target_object[] = "Moon";
+    int id_object = ephObjectByName(target_object);
+    ASSERT_FALSE(id_object == -1) << "ephObjectByName(\"Moon\") error: "
+                  << ephLastError(eph) << std::endl;
+
+    // reference_object = EMB | Earth | Sun | SSB | ...
+    char reference_object[] = "Earth";
+    int id_reference = ephObjectByName(reference_object);
+    ASSERT_FALSE(id_reference == -1) << "ephObjectByName(\"Earth\") error: "
+                  << ephLastError(eph) << std::endl;
+
+    /* открытие файла с тестовыми данными, сгенерированы через веб-приложение
+     * https://iaaras.ru/dept/ephemeris/online/ */
+    std::ifstream fs;
+    std::string fname = "IAARAS_Online_Moon_Geocenter_1788_2213_equatorialXYZVxVyVz.txt";
+    fs.open(fname);
+    ASSERT_TRUE(fs.is_open()) << "test data " << fname << " not found";
+    std::string newline;
+    for(int i = 0; i < 13; i++) // пропуск заголовка, переход к данным
+        std::getline(fs, newline);
+    while(!fs.eof()){
+        //TODO парсинг
+        double jd, X_km, Y_km, Z_km, Vx_kms, Vy_kms, Vz_kms;
+        std::stringstream(newline) >> jd >> X_km >> Y_km >> Z_km
+            >> Vx_kms >> Vy_kms >> Vz_kms;
+
+        double state[6] = {0.0};
+        result = ephCalculateRectangular(
+            eph,
+            id_object,
+            id_reference,
+            jd,
+            0.0,
+            state,
+            state + 3);
+        ASSERT_FALSE(result !=0) << "ephCalculateRectangular() error: "
+                      << ephLastError(eph) << std::endl;
+
+        EXPECT_NEAR(X_km,   state[0], 1.0); // coordinate tolerance 1 km
+        EXPECT_NEAR(Y_km,   state[1], 1.0); // coordinate tolerance 1 km
+        EXPECT_NEAR(Z_km,   state[2], 1.0); // coordinate tolerance 1 km
+        EXPECT_NEAR(Vx_kms, state[3], 0.0005); // velocity tolerance 0.0005 km/s
+        EXPECT_NEAR(Vy_kms, state[4], 0.0005); // velocity tolerance 0.0005 km/s
+        EXPECT_NEAR(Vz_kms, state[5], 0.0005); // velocity tolerance 0.0005 km/s
+
+        std::getline(fs, newline);
+    }
+    ephDestroy(eph);
+    fs.close();
 }
 
 int main(int argc, char** argv)
