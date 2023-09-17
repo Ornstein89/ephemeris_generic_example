@@ -58,7 +58,7 @@ jobs:
       id: download-artifact
       uses: dawidd6/action-download-artifact@v2
       with:
-        workflow: workflow: workflow_name.yml
+        workflow: cmake-multi-platform.yml
     # - name: Download a single artifact
     #   uses: actions/download-artifact@v3
     #   with:
