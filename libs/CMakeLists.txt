@@ -145,8 +145,10 @@ endif()
 
 #
 # IAA RAS libephaccess (https://gitlab.iaaras.ru/iaaras/ephemeris-access)
-# изначально ориентирована на сборку в Visual Studio (Windows) или Make (Linux)
-# В данном CMake-файле импортируется как некомпилируемая INTERFACE-библиотека
+# Разработчиками ориентирована на сборку в Visual Studio (Windows) или
+# Make (Linux), и репозиторий включает в себя соответствующие файлы.
+# В данном CMake-файле импортируется как предварительно некомпилируемая
+# библиотека (типа INTERFACE)
 #
 
 # клонирование исходного кода ephemeris-access IAA RAS

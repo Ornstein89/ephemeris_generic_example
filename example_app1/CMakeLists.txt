@@ -31,15 +31,21 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 
 endif()
 
-# подключение cspice (библиотека), скачанного с сайта NASA JPL
+# подключение cspice (библиотека), предварительно собранной и скачаннй
+# вместе с исходным кодом с сайта NASA JPL
+# (https://naif.jpl.nasa.gov/naif/toolkit_C.html)
+# (!!!  НЕ ПОДКЛЮЧАЕТСЯ В DEBUG-СБОРКУ !!!)
+
+# target_link_libraries(ephemeris_app1
+#     PRIVATE
+#     ${CSPICE_PREBUILT})
+
+# альтернативное подключение cspice (библиотеки), собранной на локальной машине
+# в libs/CMakeLists.txt
+# Может быть собрана и подключена в конфигурации DEBUG
 target_link_libraries(ephemeris_app1
     PRIVATE
-    ${CSPICE_PREBUILT})
-
-#подключение cspice (библиотека), собранного на локальной машине в libs/CMakeLists.txt
-#target_link_libraries(ephemeris_app1
-#    PRIVATE
-#    cspice)
+    cspice)
 
 # подключение эфемерид ИПМ РАН (только исходный код, тип INTERFACE)
 target_link_libraries(ephemeris_app1
@@ -47,12 +53,12 @@ target_link_libraries(ephemeris_app1
     ephaccess)
 
 # копирование локальных файлов данных (ядер) с коэффициентами
- configure_file(../data/NASA_JPL/naif0012.tls
-     naif0012.tls
-     COPYONLY)
- configure_file(../data/NASA_JPL/de440.bsp
-     de440.bsp
-     COPYONLY)
- configure_file(../data/EPM2021/epm2021.bsp
-     epm2021.bsp
-     COPYONLY)
+configure_file(../data/NASA_JPL/naif0012.tls
+    naif0012.tls
+    COPYONLY)
+configure_file(../data/NASA_JPL/de440.bsp
+    de440.bsp
+    COPYONLY)
+configure_file(../data/EPM2021/epm2021.bsp
+    epm2021.bsp
+    COPYONLY)
