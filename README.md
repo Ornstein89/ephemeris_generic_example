@@ -2,8 +2,6 @@
 
 [Справка на русском](README.RU.md)
 
-# Warning! This repo has no numerical validation yet! Work in progress! You can use the code on your own risk!
-
 # Basic Example of Ephemeris Libraries Use
 
 ## Description
