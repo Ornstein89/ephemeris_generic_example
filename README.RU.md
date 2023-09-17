@@ -11,7 +11,7 @@
 1) [эфемерид JPL](https://ssd.jpl.nasa.gov/planets/eph_export.html) (серии DE) и библиотеки NAIF [`CSPICE toolkit`](https://naif.jpl.nasa.gov/naif/toolkit.html).
 2) [эфемерид ИПА РАН](https://iaaras.ru/dept/ephemeris/epm/) (серии EPM) с использованием библиотеки [`libephaccess`](https://gitlab.iaaras.ru/iaaras/ephemeris-access).
 
-Библиотека  требует сборки перед подключением в проект. Файл `/libs/CMakeLists.txt` обеспечивает
+Файл `/libs/CMakeLists.txt` обеспечивает
 
 1) скачивание исходного кода и скомпилированных библиотек `SPICE toolkit` (`CSPICE`) с [сайта разработчика](https://naif.jpl.nasa.gov/naif/toolkit.html) отдельно для Windows и для Linux (мне удалось подключить скачанные статические библиотеки `.lib` и `.a` только в `release`-сборку),
 2) сборку статической библиотеки `cspice.lib`/`cspice.a` на локальной машине из скачанных исходников (подходит и для `release`, и для `debug` сборки),
