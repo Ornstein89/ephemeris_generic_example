@@ -58,4 +58,4 @@ ctest # unit testing
 * [ ] Update Visual Studio build system
 * [x] Description internationalization
 * [ ] Documentation
-* [ ] Testing
+* [x] Testing
